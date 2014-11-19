@@ -7,7 +7,7 @@ Implementing Two Player Functionality - 25 Points
     Once game is entered by two players, having it move to currently playing games instead of available to join - 4 Points
 
 Implementing Functionality of the game Pong - 30 Points
-    Getting the pong bar to properly - 8 Points
+    Getting the pong bar to properly (Potentially D3.js) - 8 Points
     Getting the ball to move accross the screen in the correct fashion - 8 Points
     Getting the collision between paddle and ball to work correctly - 6 Points
     Getting score to count correctly - 8 Points

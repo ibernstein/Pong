@@ -1,6 +1,25 @@
+CREATING 2 PLAYER PONG USING NODE.JS and SOCKET.IO
+
+Implementing Two Player Functionality - 25 Points
+    Allowing just two players to enter the game at the same time - 8 Points
+    Getting game to start after a delay once both players enter - 5 Points
+    Having games available open on homescreen for new players to join - 8 Points
+    Once game is entered by two players, having it move to currently playing games instead of available to join - 4 Points
+
+Implementing Functionality of the game Pong - 30 Points
+    Getting the pong bar to properly - 8 Points
+    Getting the ball to move accross the screen in the correct fashion - 8 Points
+    Getting the collision between paddle and ball to work correctly - 6 Points
+    Getting score to count correctly - 8 Points
+
+Implementing the ending of a game - 10 Points
+    Announcing the correct winner and rerouting back to home page - 5 Points
+    Deleting game from current games being played - 5 Points
+
 Creative Portion - 20 Points
+
 Best Practices - 10 Points
+
 Approved Rubric - 5 Points
-Assign Points to Tasks - 65 Points
 
 TOTAL: 100 Points

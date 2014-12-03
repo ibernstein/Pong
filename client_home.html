@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pong by Ian</title>
+        <link rel="stylesheet" type="text/css" href="/client_home.css"/>
+        <script src="/socket.io/socket.io.js"></script>
+        <script type ="text/javascript">
+            var username, room_name, desired_game, id;
+            var rooms = [], playing = [];
+            username = " ";
+            var socket = io.connect();
+            //on connection to server, ask for user's name
+            socket.emit('adduser', username);
+            //Set user_id given from server
+            socket.on('id_assigned', function(data){
+                id = data['user_id'];
+            });
+            //Update page when new Users join
+            socket.on('update', function(data){
+                playing = data['closed'];
+                rooms = data['rooms_list'];
+                //Room Grid
+                var row, cellText;
+                var grid = document.getElementsByTagName("body")[0];
+                //if there is already a room grid, remove it
+                if (document.getElementById("rooms")) document.getElementById("rooms").remove();
+                //Create the Table of available games
+                var roomsOpen = document.createElement("table");
+                roomsOpen.setAttribute("id", "rooms");
+                var head = document.createElement("thead"), body = document.createElement("tbody");
+                head = document.createTextNode("Available Games to Join");
+                if (rooms.length == 0) {
+                    row = document.createElement("tr");
+                    head = document.createTextNode("No Games Available to Join");
+                    body.appendChild(row);
+                }else{
+                    for(var i=0; i< rooms.length; i++){
+                        row = document.createElement("tr");
+                        cellText = document.createTextNode(rooms[i].game_id + ": " + rooms[i].room_name);
+                        row.appendChild(cellText);
+                        body.appendChild(row);
+                    }
+                }
+                roomsOpen.appendChild(head);
+                roomsOpen.appendChild(body);
+                grid.appendChild(roomsOpen);
+                roomsOpen.setAttribute("border", "7");
+                
+                //if there is already a closed room grid, remove it
+                if (document.getElementById("closed")) document.getElementById("closed").remove();
+                //Create the table for current games being played
+                var roomsClosed = document.createElement("table");
+                roomsClosed.setAttribute("id", "closed");
+                var headClosed = document.createElement("thead"), bodyClosed = document.createElement("tbody");
+                headClosed = document.createTextNode("Games Currently Being Played");
+                if (playing.length == 0) {
+                    row = document.createElement("tr");
+                    headClosed = document.createTextNode("No Games Currently Being Played");
+                    bodyClosed.appendChild(row);
+                }else{
+                    for(var i=0; i< playing.length; i++){
+                        row = document.createElement("tr");
+                        cellText = document.createTextNode(playing[i].game_id + ": " + playing[i].room_name);
+                        row.appendChild(cellText);
+                        bodyClosed.appendChild(row);
+                    }
+                }
+                roomsClosed.appendChild(headClosed);
+                roomsClosed.appendChild(bodyClosed);
+                grid.appendChild(roomsClosed);
+                roomsClosed.setAttribute("border", "7");
+            });
+            //Creates a Two-Player game room to be joined by an opponent
+            function createRoom(){
+                room_name = prompt("What is the name of the Game Room?");
+                if (room_name == null || room_name == "" || room_name == "home") {
+                    alert("The name you provided for your game is unavailable");
+                }else{
+                    socket.emit('create_room', {room:room_name, user:username, user_id:id});
+                }
+            }
+            //Join a Two-Player game room
+            function joinGame(){
+                desired_game = prompt("What is the Game ID of the game you wish to join?");
+                for(var i = 0; i < rooms.length; i++){
+                    if (desired_game == rooms[i].game_id) {
+                        socket.emit('join_game', {room:desired_game, roomname:rooms[i].room_name, user:username, user_id:id});
+                    }else{
+                        alert("The Game Room you wish to enter is not available or does not exist");
+                    }
+                }
+            }
+            //Redirect to Chosen Game or Created Game
+            socket.on('redirectcreate', function(data){
+                document.getElementById("home").style.display = "none";
+                document.getElementById("rooms").style.display = "none";
+                document.getElementById("closed").style.display = "none";
+                document.getElementById("wait").style.display = "block";
+                socket.emit('redirected', data);
+            });
+            //Redirect to Chosen Game or Created Game
+            socket.on('redirectjoin', function(data){
+                document.getElementById("home").style.display = "none";
+                document.getElementById("rooms").style.display = "none";
+                document.getElementById("closed").style.display = "none";
+                if (data['object'].playerOne == id) {
+                    document.getElementById("wait").style.display = "none";
+                }else{
+                    socket.emit('redirected', data);
+                }
+                document.getElementById("game").style.display = "block";
+            });
+            //Make player One
+            var one_id, two_id, game_id, in_game;
+            socket.on('createPlayerOne', function(data){
+                one_id = data['object'].playerOne;
+                game_id = data['object'].game_id;
+                in_game = 1;
+                console.log(in_game);
+            });
+            //Make player Two
+            socket.on('createPlayerTwo', function(data){
+                one_id = data['object'].playerOne;
+                two_id = data['object'].playerTwo;
+                game_id = data['object'].game_id;
+                if (id == two_id) {
+                    in_game = 2;
+                }
+                console.log(in_game);
+            });
+            function leave(){
+                document.getElementById("game").style.display = "none";
+                document.getElementById("wait").style.display = "none";
+                document.getElementById("home").style.display = "block";
+                document.getElementById("rooms").style.display = "block";
+                document.getElementById("closed").style.display = "block";
+                socket.emit('leaving', {room:game_id});
+            }
+            socket.on('leave', function(data){
+                document.getElementById("game").style.display = "none";
+                document.getElementById("wait").style.display = "none";
+                document.getElementById("home").style.display = "block";
+                document.getElementById("rooms").style.display = "block";
+                document.getElementById("closed").style.display = "block";
+                socket.emit('leaving', data);
+            })
+        </script>
+    </head>
+    <body>
+        <h1>2-Player Pong</h1>
+        <div id="home" style = "display: block">
+            <h3>Join or Create a game of pong</h3>
+            <button id="single" onclick="window.location.href='http://ec2-54-69-241-236.us-west-2.compute.amazonaws.com:2345/client_game_one.html'">Play Single Player!</button>
+            <br><br><hr>
+            <button id="createGame" onClick="createRoom()">Create Two-Player Game Room</button>
+            <br><br>
+            <button id="joinGame" onClick="joinGame()">Join a Two-Player Game Room</button>
+            <br><br>
+        </div>
+        <div id="game" style = "display: none">
+            <h3>Best of Luck!</h3><hr><br><br><br><br>
+            <canvas id="canvas"></canvas>
+            <audio preload="true" id="collide">
+                <source src="http://www.freesoundeffects.com/sounds1/sports/baseball/bat_hit_ball.wav"/>
+            </audio>
+            <button id="leave" onClick="leave()">Leave the current Game</button>
+        </div>
+        <div id="wait" style = "display: none">
+            <h4>You must now Wait for another player to join</h4>
+            <button id="leave" onClick="leave()">Leave the current Game</button>
+        </div>
+    </body>
+    <script src="/pong_two.js" type ="text/javascript"></script>
+</html>

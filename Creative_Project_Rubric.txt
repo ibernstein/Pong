@@ -4,7 +4,7 @@ Implementing Two Player Functionality - 25 Points
     Allowing just two players to enter the game at the same time - 8 Points
     Getting game to start after a delay once both players enter - 5 Points
     Having games available open on homescreen for new players to join - 8 Points
-    Once game is entered by two players, having it move to currently playing games instead of available to join - 4 Points
+    Once game is entered by two players, having it move to current games being played instead of available to join - 4 Points
 
 Implementing Functionality of the game Pong - 30 Points
     Getting the pong bar to properly (Potentially D3.js) - 8 Points
@@ -17,6 +17,9 @@ Implementing the ending of a game - 10 Points
     Deleting game from current games being played - 5 Points
 
 Creative Portion - 20 Points
+    Sparks fly off paddle - 8 Points
+    Sound when ball hits paddle - 8 Points
+    Speed increases longer the game goes - 4 Points
 
 Best Practices - 10 Points
 

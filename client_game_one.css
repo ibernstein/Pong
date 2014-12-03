@@ -1,0 +1,22 @@
+body {
+    background-color: beige;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+#logout {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+h1 {
+    color: Blue;
+    text-align: center;
+}
+
+h3 {
+    color: Blue;
+    text-align: center;
+}

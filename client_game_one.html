@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pong by Ian</title>
+        <link rel="stylesheet" type="text/css" href="/client_game_one.css"/>
+        <script src="/socket.io/socket.io.js"></script>
+        
+    </head>
+    <body>
+        <h1>1-Player Pong</h1>
+        <h3>Best of Luck!</h3><hr>
+        <a id="logout" href="http://ec2-54-69-241-236.us-west-2.compute.amazonaws.com:2345/client_home.html">Go Back to Home Screen!</a>
+        <canvas id="canvas"></canvas>
+        <audio preload="true" id="collide">
+            <source src="http://www.freesoundeffects.com/sounds1/sports/baseball/bat_hit_ball.wav"/>
+        </audio>
+    </body>
+    <script src="/pong_one.js" type ="text/javascript"></script>
+</html>

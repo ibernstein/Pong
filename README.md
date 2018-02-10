@@ -4,4 +4,4 @@ This is the Final Project for my Rapid Prototype Development and Creative Design
 
 This code was done individually.
 
-Utitilized: Socket.io, 
+Utitilized: JavaScript, Socket.io, Node.js
